@@ -1,8 +1,11 @@
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { MountainIcon, MenuIcon } from "lucide-react";
+import { MountainIcon, MenuIcon, XIcon } from "lucide-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <header className="bg-primary text-primary-foreground shadow-lg">
@@ -40,10 +43,42 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             variant="outline"
             size="icon"
             className="md:hidden text-primary-foreground border-primary-foreground"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <MenuIcon className="h-6 w-6" />
+            {isMenuOpen ? (
+              <XIcon className="h-6 w-6" />
+            ) : (
+              <MenuIcon className="h-6 w-6" />
+            )}
           </Button>
         </div>
+        {isMenuOpen && (
+          <div className="md:hidden">
+            <nav className="flex flex-col space-y-2 px-4 py-2">
+              <Button
+                variant="ghost"
+                className="text-primary-foreground hover:text-primary-foreground/80 justify-start"
+                asChild
+              >
+                <Link href="/">Home</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-primary-foreground hover:text-primary-foreground/80 justify-start"
+                asChild
+              >
+                <Link href="/domains">Domains</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-primary-foreground hover:text-primary-foreground/80 justify-start"
+                asChild
+              >
+                <Link href="/blog">Blog</Link>
+              </Button>
+            </nav>
+          </div>
+        )}
       </header>
       <main className="flex-grow">{children}</main>
       <footer className="bg-muted text-muted-foreground">
